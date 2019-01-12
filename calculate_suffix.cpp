@@ -4,6 +4,9 @@ using namespace std;
 //返回a,b的最大公因数
 int gcd(int a, int b)
 {
+	if (a == 0 || b == 0)
+		return 0;
+
 	int c;
 	if (a < b)
 	{
@@ -57,13 +60,20 @@ word calculate(word a, word op, word b)
 	{
 		rn = an * bd;
 		rd = ad * bn;
+
+		if (rd == 0)
+		{
+			result.init(-1, 0, 1);
+			return result;
+		}
 	}; break;
 
 	case POWER:
 	{
 		if (bd != 1 || bn < 0)//指数的分母不为1或者分子小于0
 		{
-			rn = rd = 0;
+			result.init(-1, 0, 1);
+			return result;
 		}
 		else
 		{
@@ -81,25 +91,22 @@ word calculate(word a, word op, word b)
 		break;
 	}
 
-
-	if (rd == 0)//出现了除以0或者指数不为非负整数
+	//化简
+	int g = gcd(rn, rd);//结果的分子，分母的最大公因数
+	if (g != 0)
 	{
-		result.init(-1, 0, 1);
-	}
-	else
-	{
-		//化简
-		int g = gcd(rn, rd);//结果的分子，分母的最大公因数
 		rn /= g;
 		rd /= g;
-		result.init(0, rn, rd);
 	}
+	result.init(0, rn, rd);
+
 	return result;
 }
 
 //返回后缀表达式suffix的计算结果，如果表达式不正确，返回的result.type = -1
-word calculate_suffix(queue<word> suffix, word& result)
+word calculate_suffix(queue<word> suffix)
 {
+	word result;
 	class stack<word> num_stack;//数字栈
 
 	//后缀队列非空时

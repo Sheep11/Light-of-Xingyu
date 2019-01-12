@@ -5,5 +5,6 @@ int main()
 {
 	generate_exp(100);
 
+	system("pause");
 
 }

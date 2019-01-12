@@ -5,7 +5,6 @@
 //如果x是数字，返回-1，否则返回操作符对应的数字
 int check_type(const char x);
 
-
 //返回数字对应的操作符
 char change_oper(const int oper);
 
@@ -16,4 +15,4 @@ int check_priority(const char x);
 int cmp_priority(const char x, const char y);
 
 //将exp转化为后缀表达式,存在队列里返回
-std::queue<word> translate_into_suffix(const std::string exp, std::queue<word>suffix);
+std::queue<word> translate_into_suffix(const std::string exp);

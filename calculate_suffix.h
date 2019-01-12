@@ -9,4 +9,4 @@ int gcd(int a, int b);
 word calculate(word a, word op, word b);
 
 //返回后缀表达式suffix的计算结果，如果表达式不正确，返回的result.type = -1
-word calculate_suffix(std::queue<word> suffix, word& result);
+word calculate_suffix(std::queue<word> suffix);

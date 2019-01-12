@@ -83,11 +83,10 @@ int cmp_priority(const char x, const char y)
 }
 
 //将exp转化为后缀表达式,存在队列里返回
-queue<word> translate_into_suffix(const string exp, queue<word>suffix)
+queue<word> translate_into_suffix(const string exp)
 {
-	//queue<class word>suffix;//存储后缀表达式的队列
+	queue<class word>suffix;//存储后缀表达式的队列
 	stack<int>oper_stack;//暂时存储操作符的栈
-
 
 	for (int i = 0; i < exp.size(); i++)
 	{

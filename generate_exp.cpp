@@ -25,16 +25,6 @@ int generate_exp(int N, int max_number, int max_oper_sum, int show_way)
 		Tool.normalize_exp(exp[n]);//规范化
 		
 		Tool.add_number_into_exp(exp[n], max_number);//添加数字
-
-		switch (n)
-		{
-			case 0:exp[n] = "1+2+3"; break;
-			case 1:exp[n] = "3+(2+1)"; break;
-			//case 2:exp[n] = "3+2+1"; break;
-			default:
-				break;
-		}
-
 			
 		suffix[n] = translate_into_suffix(exp[n]);//转化为后缀表达式
 

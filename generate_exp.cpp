@@ -42,16 +42,20 @@ int generate_exp(int N, int max_number, int max_oper_sum)
 			//添加数字
 			Tool.add_number_into_exp(exp[n], max_number);
 
-			//if (n == 0)
-			//	exp[n] = "1+2+3";
-			//else
-			//	exp[n] = "3+(2+1)";
+			//switch (n)
+			//{
+			//	case 0:exp[n] = "1+2+3"; break;
+			//	case 1:exp[n] = "3+2+1"; break;
+			//	//case 2:exp[n] = "3+2+1"; break;
+			//	default:
+			//		break;
+			//}
 
 			//转化为后缀表达式
 			suffix[n] = translate_into_suffix(exp[n]);
 
 			
-			result[n] = calculate_suffix(suffix[n]);//计算表达式的值
+			result[n] = calculate_suffix(suffix[n]);//计算后缀表达式的值
 			if (result[n].type == -1)//如果表达式有误，重新生成表达式
 			{
 				//清空exp[n],suffix[n],result[n],tree[n]
@@ -60,51 +64,33 @@ int generate_exp(int N, int max_number, int max_oper_sum)
 				tree[n].init();
 				while (!suffix[n].empty())
 					suffix[n].pop();
+
 				continue;
 			}
 			else
 			{
-				break;
+				tree[n] = Tool.translate_into_bi_tree(suffix[n]);
+
+				int repeat_flag = 0;
+				for (int i = 0; i < n; i++)
+				{
+					if (Tool.compare_tree(&tree[n], &tree[i]) == 1)
+					{
+						//清空exp[n],suffix[n],result[n],tree[n]
+						exp[n].clear();
+						result[n].init();
+						tree[n].init();
+						while (!suffix[n].empty())
+							suffix[n].pop();
+						repeat_flag = 1;
+						break;
+					}
+				}
+				if (repeat_flag == 1)
+					continue;
+				else
+					break;
 			}
-			//else
-			//{
-			//	tree[n] = Tool.translate_into_bi_tree(suffix[n]);
-
-			//	int repeat_flag = 0;
-			//	for (int i = 0; i < n; i++)
-			//	{
-			//		if (Tool.compare_tree(&tree[n], &tree[i]) == 1)
-			//		{
-			//			//清空exp[n],suffix[n],result[n],tree[n]
-			//			exp[n].clear();
-			//			result[n].init();
-			//			tree[n].init();
-			//			while (!suffix[n].empty())
-			//				suffix[n].pop();
-			//			repeat_flag = 1;
-			//			break;
-			//		}
-			//	}
-			//	if (repeat_flag == 1)
-			//	{
-			//		continue;
-			//	}
-			//	else
-			//		break;
-			//	//if (check_repeat(tree, tree[n], n) == 1)
-			//	//{
-			//	//	//清空exp[n],suffix[n],result[n],tree[n]
-			//	//	exp[n].clear();
-			//	//	result[n].init();
-			//	//	tree[n].init();
-			//	//	while (!suffix[n].empty())
-			//	//		suffix[n].pop();
-
-			//	//	continue;
-			//	//}
-			//	//else
-			//	//	break;
-			//}
 		}
 
 

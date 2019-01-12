@@ -2,6 +2,9 @@
 
 using namespace std;
 
+
+//word
+//构造函数
 word::word()
 {
 	type = -1;
@@ -16,6 +19,7 @@ word::word(int type_t, int n, int d)//类型，分子，分母
 		oper = n, num = 0, de = 0;
 }
 
+//初始化函数
 void word:: init()
 {
 	type = -1;
@@ -30,6 +34,7 @@ void word::init(int type_t, int n, int d)
 		oper = n, num = 0, de = 0;
 }
 
+//等号重载
 word& word::operator =(const word& source_word)//重载赋值运算符
 {
 	if (this != &source_word)
@@ -44,6 +49,7 @@ word& word::operator =(const word& source_word)//重载赋值运算符
 
 
 //二叉树
+//构造函数
 bi_tree::bi_tree()
 {
 	value.init();
@@ -61,6 +67,7 @@ bi_tree::bi_tree(word v, bi_tree lc, bi_tree rc)
 	r_child = &rc;
 }
 
+//初始化函数
 void bi_tree::init()
 {
 	value.init();
@@ -74,21 +81,22 @@ void bi_tree::init(word v)
 void bi_tree::init(word v, bi_tree lc, bi_tree rc)
 {
 	value = v;
-
-	bi_tree *tl = (bi_tree*)malloc(sizeof(bi_tree));
-	tl->value = lc.value;
-	tl->l_child = lc.l_child;
-	tl->r_child = lc.r_child;
-
-	bi_tree *tr = (bi_tree*)malloc(sizeof(bi_tree));
-	tr->value = rc.value;
-	tr->l_child = rc.l_child;
-	tr->r_child = rc.r_child;
-
-	l_child = tl;
-	r_child = tr;
+	bi_tree* t_lc = new bi_tree;
+	bi_tree* t_rc = new bi_tree;
+	*t_lc = lc;
+	*t_rc = rc;
+	
+	this->l_child = t_lc;
+	this->r_child = t_rc;
+}
+void bi_tree::init(word v, bi_tree* lc, bi_tree* rc)
+{
+	this->value = v;
+	this->l_child = lc;
+	this->r_child = rc;
 }
 
+//等号重载
 bi_tree& bi_tree::operator =(const bi_tree& source_tree)//重载赋值运算符
 {
 	if (this != &source_tree)
@@ -101,13 +109,11 @@ bi_tree& bi_tree::operator =(const bi_tree& source_tree)//重载赋值运算符
 }
 
 
-
-
-
+//工具类
 //后缀表达式转换为二叉树
 bi_tree tool::translate_into_bi_tree(class queue<word> suffix)
 {
-	class stack<bi_tree> t_stack;//临时栈
+	stack<bi_tree> t_stack;//临时栈
 
 	//后缀队列非空时
 	while (!suffix.empty())
@@ -115,6 +121,7 @@ bi_tree tool::translate_into_bi_tree(class queue<word> suffix)
 		word t_word;//临时存储从队列中弹出的元素
 		t_word = suffix.front();
 		suffix.pop();
+		//bi_tree *a = new bi_tree();
 
 		if (t_word.type == 0)//如果为数字
 		{
@@ -123,20 +130,20 @@ bi_tree tool::translate_into_bi_tree(class queue<word> suffix)
 		}
 		else//如果为操作符
 		{
-
-			bi_tree b = t_stack.top();
+			bi_tree* b = new bi_tree();
+			*b = t_stack.top();
 			t_stack.pop();
 
-			bi_tree a = t_stack.top();
+			bi_tree* a = new bi_tree();
+			*a = t_stack.top();
 			t_stack.pop();
 
-			bi_tree c;
-			c.value = t_word;
-			c.l_child = &a;
-			c.r_child = &b;
-			//bi_tree c(t_word, a, b);
-			t_stack.push(c);
+			bi_tree* c = new bi_tree();
+			c->init(t_word, a, b);
+			t_stack.push(*c);
+
 		}
+
 	}
 
 	bi_tree return_value = t_stack.top();
@@ -178,13 +185,10 @@ int tool::compare_tree(bi_tree *a, bi_tree *b)
 	if ((a != NULL && b == NULL) || (a == NULL && b != NULL))
 		return 0;
 
-	if (a != NULL && b != NULL)
+	if (a && b)
 	{
 		if (cmp_word(a->value, b->value))//如果当前节点相同
 		{
-			if (a->l_child == NULL || a->r_child == NULL || b->l_child == NULL || b->r_child == NULL)
-				return 0;
-
 			if (compare_tree(a->l_child, b->l_child))
 				return compare_tree(a->r_child, b->r_child);
 			else

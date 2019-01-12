@@ -63,7 +63,7 @@ word calculate(word a, word op, word b)
 
 		if (rd == 0)
 		{
-			result.init(-1, 0, 1);
+			result.init(-1, 0, 0);
 			return result;
 		}
 	}; break;
@@ -72,7 +72,7 @@ word calculate(word a, word op, word b)
 	{
 		if (bd != 1 || bn < 0)//指数的分母不为1或者分子小于0
 		{
-			result.init(-1, 0, 1);
+			result.init(-1, 0, 0);
 			return result;
 		}
 		else
@@ -98,6 +98,9 @@ word calculate(word a, word op, word b)
 		rn /= g;
 		rd /= g;
 	}
+	if (rd < 0)
+		rn *= -1, rd *= -1;
+
 	result.init(0, rn, rd);
 
 	return result;
@@ -132,7 +135,6 @@ word calculate_suffix(queue<word> suffix)
 			word c = calculate(a, t_word, b);
 			if (c.type == -1)//如果计算结果出现错误
 			{
-				//word result(-1, 0, 0);
 				result.init(-1, 0, 0);
 				return result;
 			}

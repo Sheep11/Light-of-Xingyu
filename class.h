@@ -36,6 +36,7 @@ public:
 	void init();
 	void init(word v);
 	void init(word v, bi_tree lc, bi_tree rc);
+	void init(word v, bi_tree* lc, bi_tree* rc);
 
 	bi_tree& operator =(const bi_tree& source_tree);//ÖØÔØ¸³ÖµÔËËã·û
 };

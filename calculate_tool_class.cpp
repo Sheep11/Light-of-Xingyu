@@ -1,8 +1,8 @@
-#include"calculate_suffix.h"
+#include"calculate_tool_class.h"
 using namespace std;
 
 //返回a,b的最大公因数
-int gcd(int a, int b)
+int calculate_tool::gcd(int a, int b)
 {
 	if (a == 0 || b == 0)
 		return 0;
@@ -25,7 +25,7 @@ int gcd(int a, int b)
 }
 
 //返回a op b的计算结果。如果出现了除以0或者指数不为非负整数，返回的result.type = -1
-word calculate(word a, word op, word b)
+word calculate_tool::calculate(word a, word op, word b)
 {
 	int an = a.num, //a的分子
 		ad = a.de;//a的分母
@@ -107,7 +107,7 @@ word calculate(word a, word op, word b)
 }
 
 //返回后缀表达式suffix的计算结果，如果表达式不正确，返回的result.type = -1
-word calculate_suffix(queue<word> suffix)
+word calculate_tool::calculate_suffix(queue<word> suffix)
 {
 	word result;
 	class stack<word> num_stack;//数字栈

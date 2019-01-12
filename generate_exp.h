@@ -1,8 +1,7 @@
 #pragma once
 #include "class.h"
 #include "libraryfile_and_define.h"
-#include "calculate_suffix.h"
-#include "translate_into_suffix.h"
+#include "generate_tool_class.h"
 
 using namespace std;
 

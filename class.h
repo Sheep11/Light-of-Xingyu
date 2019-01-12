@@ -60,6 +60,7 @@ public:
 	//将数字转化成操作符
 	char translate_into_oper(int num);
 
+	//添加操作符
 	void add_oper_into_exp(string& exp, int max_oper_sum);
 
 	//将仅有操作符的表达式规范化
@@ -68,4 +69,12 @@ public:
 	//向仅有操作符的表达式添加数字
 	void add_number_into_exp(string& oper_exp, int max_number);
 
+	//检测是否有重复，如果有，返回1，没有返回0
+	int is_repeat(bi_tree tree_array[], bi_tree tree, int n);
+
+	//清除当前记录
+	void clear_trail(string& exp, queue<word>& suffix, word& result, bi_tree& tree);
+
+	//改变显示乘方的方式
+	void change_show_way(string& exp);
 };

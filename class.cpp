@@ -324,3 +324,40 @@ void tool::add_number_into_exp(string& oper_exp, int max_number)
 		}
 	}
 }
+
+//检测是否有重复，如果有，返回1，没有返回0
+int tool::is_repeat(bi_tree tree_array[], bi_tree tree, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (compare_tree(&tree, &tree_array[i]) == 1)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//清除当前记录
+void tool::clear_trail(string& exp, queue<word>& suffix, word& result, bi_tree& tree)
+{
+	//清空exp[n],suffix[n],result[n],tree[n]
+	exp.clear();
+	result.init();
+	tree.init();
+	while (!suffix.empty())
+		suffix.pop();
+}
+
+//改变显示乘方的方式
+void tool::change_show_way(string& exp)
+{
+	for (int i = 0; i < exp.size(); i++)
+	{
+		if (exp[i] == '^')
+		{
+			exp.erase(i, 1);
+			exp.insert(i, "**");
+		}
+	}
+}

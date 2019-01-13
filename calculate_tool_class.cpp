@@ -98,6 +98,10 @@ word calculate_tool::calculate(word a, word op, word b)
 		rn /= g;
 		rd /= g;
 	}
+
+	if (rn == 0)
+		rd = 1;
+
 	if (rd < 0)
 		rn *= -1, rd *= -1;
 

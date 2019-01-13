@@ -1,8 +1,9 @@
 #include"libraryfile_and_define.h"
 #include"generate_tool_class.h"
+#include"calculate_tool_class.h"
+#include"translate_tool_class.h"
 
-
-//工具类
+//生成工具类
 //后缀表达式转换为二叉树
 bi_tree generate_tool::translate_into_bi_tree(class queue<word> suffix)
 {
@@ -218,6 +219,21 @@ void generate_tool::add_number_into_exp(string& oper_exp, int max_number)
 	}
 }
 
+//限制结果的范围或者格式
+int generate_tool::restrict_result(string exp, word result)
+{
+	if (result.type == -1)
+		return 0;
+
+	if (exp == result.str_word())
+		return 0;
+	
+	if (result.num > 1000 || result.de > 100 || result.num * (-1) > 1000 || result.de * (-1) > 100)
+		return 0;
+
+	return 1;
+}
+
 //检测是否有重复，如果有，返回1，没有返回0
 int generate_tool::is_repeat(bi_tree tree_array[], bi_tree tree, int n)
 {
@@ -253,4 +269,72 @@ void generate_tool::change_show_way(string& exp)
 			exp.insert(i, "**");
 		}
 	}
+}
+
+//生成N个表达式和答案，存在栈中返回
+//max_number为表达式中数字的最大值，
+//max_oper_sum为表达式中最多含有的运算符的数量
+//show_way为显示乘方的模式，为0显示^，为1显示**
+stack<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_sum, int show_way)
+{
+	stack<formula>	F_stack;//将要返回的栈
+	if (N > MAX_SIZE)
+		return F_stack;
+
+	srand(time(NULL));
+
+	string exp[MAX_SIZE];//表达式的字符串形式
+	bi_tree tree[MAX_SIZE];//表达式的二叉树形式
+	queue<word> suffix[MAX_SIZE];//后缀表达式
+	word result[MAX_SIZE];//表达式的计算结果
+
+
+	translate_tool T_tool;
+	calculate_tool C_tool;
+	generate_tool G_tool;
+
+	int n = 0;//当前的式子编号
+	while (n < N)
+	{
+		G_tool.add_oper_into_exp(exp[n], max_oper_sum);//添加操作符
+	
+		G_tool.normalize_exp(exp[n]);//规范化
+		
+		G_tool.add_number_into_exp(exp[n], max_number);//添加数字
+
+		suffix[n] = T_tool.translate_into_suffix(exp[n]);//转化为后缀表达式
+
+		result[n] = C_tool.calculate_suffix(suffix[n]);//计算后缀表达式的值
+
+		if (G_tool.restrict_result(exp[n], result[n]) == 0)//如果计算结果不符合要求，重新生成表达式
+		{
+			G_tool.clear_trail(exp[n], suffix[n], result[n], tree[n]);//清除记录
+			continue;
+		}
+		else//结果符合要求，检测是否与之前生成的表达式重复
+		{
+			tree[n] = G_tool.translate_into_bi_tree(suffix[n]);//由后缀表达式生成二叉树
+
+			int repeat_flag = G_tool.is_repeat(tree, tree[n], n);
+			if (repeat_flag == 1)//重复
+			{
+				G_tool.clear_trail(exp[n], suffix[n], result[n], tree[n]);//清除记录
+				continue;
+			}
+		}
+
+		//如果show_way = 1，把表达式中的^换成**
+		if (show_way == 1)
+			G_tool.change_show_way(exp[n]);
+
+		//表达式和答案存入栈中
+		formula F;
+		F.init(exp[n], result[n].str_word());
+		F_stack.push(F);
+
+		//cout << exp[n] << endl;
+		n++;
+	}
+
+	return F_stack;
 }

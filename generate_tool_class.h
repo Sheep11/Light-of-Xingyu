@@ -30,6 +30,9 @@ public:
 	//向仅有操作符的表达式添加数字
 	void add_number_into_exp(string& oper_exp, int max_number);
 
+	//限制结果的范围或者格式
+	int restrict_result(string exp, word result);
+
 	//检测是否有重复，如果有，返回1，没有返回0
 	int is_repeat(bi_tree tree_array[], bi_tree tree, int n);
 
@@ -38,4 +41,6 @@ public:
 
 	//改变显示乘方的方式
 	void change_show_way(string& exp);
+
+	stack<formula> generate_exp(int N = 1000, int max_number = 10, int max_oper_sum = 10, int show_way = 0);
 };

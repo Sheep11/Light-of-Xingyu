@@ -1,4 +1,7 @@
 #include "class.h"
+#include"generate_tool_class.h"
+#include"calculate_tool_class.h"
+#include"translate_tool_class.h"
 
 using namespace std;
 
@@ -45,6 +48,19 @@ word& word::operator =(const word& source_word)//重载赋值运算符
 		this->de = source_word.de;
 	}
 	return *this;
+}
+
+string word::str_word()
+{
+	string t_result;
+	t_result += to_string(num);
+	if (de != 1)
+	{
+		t_result += '/';
+		t_result += to_string(de);
+	}
+
+	return t_result;
 }
 
 
@@ -106,5 +122,146 @@ bi_tree& bi_tree::operator =(const bi_tree& source_tree)//重载赋值运算符
 		this->r_child = source_tree.r_child;
 	}
 	return *this;
+}
+
+formula::formula()
+{
+	;
+}
+formula::formula(string P, string A)
+{
+	Problem = P;
+	Answer = A;
+}
+formula::formula(const formula& F)
+{
+	this->Problem = F.Problem;
+	this->Answer = F.Answer;
+}
+
+void formula::init()
+{
+	;
+}
+void formula::init(string P, string A)
+{
+	Problem = P;
+	Answer = A;
+}
+
+string formula::problem()
+{
+	return Problem;
+}
+
+string formula::answer()
+{
+	return Answer;
+}
+
+int formula::check(string u_answer)
+{
+	if (u_answer == Answer)
+		return 1;
+
+	for (int i = 0; i < u_answer.size(); i++)
+	{
+		if (u_answer[i] == '/')
+		{
+			if (u_answer[i + 1] == '-')
+			{
+				u_answer.erase(i + 1, 1);
+				u_answer.insert(0, "-");
+				if (u_answer == Answer)
+					return 1;
+				else
+					return 0;
+			}
+		}
+	}
+	return 0;
+}
+
+
+
+
+generator::generator()
+{
+	show_way = 0;
+}
+
+void generator::output_into_file(string exp, string path)
+{
+	ofstream out(path, ios::app);
+	out << exp << endl;
+}
+
+formula generator::get_formula()
+{
+	if (this->show_way != 0)
+	{
+		while (Formula.size() != 0)
+			Formula.pop();
+
+		this->show_way = 0;
+	}
+
+	if (Formula.size() != 0)
+	{
+		formula return_value = Formula.top();
+		output_into_file(return_value.problem());
+
+		Formula.pop();
+
+		return return_value;
+	}
+	else
+	{
+		generate_tool G_tool;
+		Formula = G_tool.generate_exp(1000, 10, 10, this->show_way);
+
+		formula return_value = Formula.top();
+		output_into_file(return_value.problem());
+
+		Formula.pop();
+
+		return return_value;
+	}
+}
+
+formula generator::get_formula(int Show_way)
+{
+	if (Show_way != 1)
+		Show_way = 0;
+
+	if (Show_way != this->show_way)
+	{
+		while (Formula.size() != 0)
+			Formula.pop();
+
+		this->show_way = Show_way;
+	}
+
+	if (Formula.size() != 0)
+	{
+		formula return_value = Formula.top();
+		output_into_file(return_value.problem());
+
+		Formula.pop();
+
+		return return_value;
+	}
+	else
+	{
+		generate_tool G_tool;
+		Formula = G_tool.generate_exp(1000, 10, 10, this->show_way);
+
+		formula return_value = Formula.top();
+		output_into_file(return_value.problem());
+
+		Formula.pop();
+
+		return return_value;
+	}
 }
 

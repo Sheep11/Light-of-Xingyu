@@ -235,10 +235,13 @@ int generate_tool::restrict_result(string exp, word result)
 }
 
 //检测是否有重复，如果有，返回1，没有返回0
-int generate_tool::is_repeat(bi_tree tree_array[], bi_tree tree, int n)
+int generate_tool::is_repeat(word result_array[], word result, bi_tree tree_array[], bi_tree tree, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
+		if (!(result_array[i].num == result.num && result_array[i].de == result.de))
+			continue;
+
 		if (compare_tree(&tree, &tree_array[i]) == 1)
 		{
 			return 1;
@@ -315,7 +318,7 @@ stack<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_s
 		{
 			tree[n] = G_tool.translate_into_bi_tree(suffix[n]);//由后缀表达式生成二叉树
 
-			int repeat_flag = G_tool.is_repeat(tree, tree[n], n);
+			int repeat_flag = G_tool.is_repeat(result, result[n], tree, tree[n], n);
 			if (repeat_flag == 1)//重复
 			{
 				G_tool.clear_trail(exp[n], suffix[n], result[n], tree[n]);//清除记录

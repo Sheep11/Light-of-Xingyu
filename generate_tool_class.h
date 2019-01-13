@@ -34,7 +34,7 @@ public:
 	int restrict_result(string exp, word result);
 
 	//检测是否有重复，如果有，返回1，没有返回0
-	int is_repeat(bi_tree tree_array[], bi_tree tree, int n);
+	int is_repeat(word result_array[], word result, bi_tree tree_array[], bi_tree tree, int n);
 
 	//清除当前记录
 	void clear_trail(string& exp, queue<word>& suffix, word& result, bi_tree& tree);

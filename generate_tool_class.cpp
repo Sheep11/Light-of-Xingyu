@@ -193,7 +193,7 @@ void generate_tool::normalize_exp(string& oper_exp)
 	}
 }
 
-//向仅有操作符的表达式添加数字
+//向仅有操作符的表达式添加数字，数字的最大值为max_number
 void generate_tool::add_number_into_exp(string& oper_exp, int max_number)
 {
 	//向字符串中添加数字

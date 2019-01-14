@@ -68,13 +68,17 @@ public:
 class generator
 {
 private:
-	int show_way;
+	int show_way;//显示乘方的方式，如果为0显示为“^”，为1显示为“**”，初始化默认为0
 	stack<formula> Formula;
 public:
 	generator();
+
+	//输出式子到文件path中，默认为problem_file.txt
 	void output_into_file(string exp, string path = "problem_file.txt");
 
-	formula get_formula();//获取一个式子及答案,返回值为formula对象
-	formula get_formula(int show_way);//获取一个式子及答案,返回值为formula对象
+	//获取一个式子及答案,返回值为formula对象
+	//默认显示乘方为“^”，如果需要切换为“**”，传入整型参数1
+	formula get_formula(int show_way = 0);
+
 };
 

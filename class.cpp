@@ -196,45 +196,12 @@ void generator::output_into_file(string exp, string path)
 	out << exp << endl;
 }
 
-formula generator::get_formula()
-{
-	if (this->show_way != 0)
-	{
-		while (Formula.size() != 0)
-			Formula.pop();
-
-		this->show_way = 0;
-	}
-
-	if (Formula.size() != 0)
-	{
-		formula return_value = Formula.top();
-		output_into_file(return_value.problem());
-
-		Formula.pop();
-
-		return return_value;
-	}
-	else
-	{
-		generate_tool G_tool;
-		Formula = G_tool.generate_exp(1000, 10, 10, this->show_way);
-
-		formula return_value = Formula.top();
-		output_into_file(return_value.problem());
-
-		Formula.pop();
-
-		return return_value;
-	}
-}
-
 formula generator::get_formula(int Show_way)
 {
 	if (Show_way != 1)
 		Show_way = 0;
 
-	if (Show_way != this->show_way)
+	if (this->show_way != Show_way)
 	{
 		while (Formula.size() != 0)
 			Formula.pop();

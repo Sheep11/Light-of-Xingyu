@@ -237,6 +237,9 @@ int generator::check_answer(int id, string u_answer)
 
 	for (int i = 0; i < u_answer.size(); i++)
 	{
+		if (u_answer[i] == ' ' || u_answer[i] == '\n')
+			u_answer.erase(i, 1);
+
 		if (u_answer[i] == '/')
 		{
 			if (u_answer[i + 1] == '-')

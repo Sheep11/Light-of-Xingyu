@@ -310,7 +310,7 @@ vector<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_
 
 		suffix[n] = T_tool.translate_into_suffix(exp[n]);//转化为后缀表达式
 
-		result[n] = C_tool.calculate_suffix(suffix[n]);//计算后缀表达式的值
+		result[n] = C_tool.calculate_suffix(exp[n]);//计算后缀表达式的值
 
 		if (G_tool.restrict_result(exp[n], result[n]) == 0)//如果计算结果不符合要求，重新生成表达式
 		{
@@ -338,7 +338,6 @@ vector<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_
 		F.init(exp[n], result[n].str_word());
 		F_vector.push_back(F);
 
-		//cout << exp[n] << endl;
 		n++;
 	}
 

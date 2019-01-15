@@ -15,14 +15,14 @@ int main()
 		cout << "答案：";
 		cout << F.answer << endl << endl;
 
-		cout << "输入答案：";
-		string answer;
-		cin >> answer;
+		//cout << "输入答案：";
+		//string answer;
+		//cin >> answer;
 
-		if (G.check_answer(F.id, answer) == 1)//检查答案是否正确，正确返回1
-			cout << "回答正确" << endl << endl;
-		else
-			cout << "回答错误" << endl << endl;
+		//if (G.check_answer(F.id, answer) == 1)//检查答案是否正确，正确返回1
+		//	cout << "回答正确" << endl << endl;
+		//else
+		//	cout << "回答错误" << endl << endl;
 	}
 
 	for (int i = 51; i <= 100; i++)

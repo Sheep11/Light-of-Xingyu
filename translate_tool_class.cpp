@@ -4,9 +4,12 @@
 using namespace std;
 
 
-//如果x是数字，返回-1，否则返回操作符对应的数字
+//如果x是数字，返回-1，如果是空格或者回车，返回0，如果是操作符则返回对应的数字，如果是其他符号，返回-2
 int translate_tool::check_type(const char x)
 {
+	if (x == ' ' || x == '\n')
+		return 0;
+
 	if (x == '+')
 		return 1;
 	if (x == '-')
@@ -23,7 +26,10 @@ int translate_tool::check_type(const char x)
 	if (x == ')')
 		return 7;
 
-	return -1;
+	if (x >= '0' && x <= '9')
+		return -1;
+
+	return -2;
 }
 
 //返回数字对应的操作符
@@ -67,7 +73,7 @@ int translate_tool::check_priority(const char x)
 	return -1;
 }
 
-//比较操作符x和y的优先级。如果x>y返回1，x=y返回0，x<y返回-1
+//比较操作符x和y的优先级。如果x>y或者x和y均为乘方返回1，x=y返回0，x<y返回-1
 int translate_tool::cmp_priority(const char x, const char y)
 {
 	int x_p = check_priority(x),
@@ -93,7 +99,18 @@ queue<word> translate_tool::translate_into_suffix(const string exp)
 	{
 		int type = check_type(exp[i]);//当前字符的类型
 
-		if (type < 0)//如果为数字
+		if (type == 0)
+			continue;
+
+		if (type == -2)
+		{
+			while (suffix.size() != 0)
+				suffix.pop();
+
+			return suffix;
+		}
+
+		if (type == -1)//如果为数字
 		{
 			int num = exp[i] - '0';
 

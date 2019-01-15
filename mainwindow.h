@@ -3,11 +3,16 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
 
-#include<qspinbox.h>
-#include<qslider.h>
 #include<qlayout.h>
 #include<qmessagebox.h>
 #include<qtextedit.h>
+#include<qlineedit.h>
+#include<qtimer.h>
+#include<qlabel.h>
+#include<qline.h>
+#include<qtablewidget.h>
+#include<qpushbutton.h>
+#include<qheaderview.h>
 
 class mainwindow : public QMainWindow
 {
@@ -15,14 +20,10 @@ class mainwindow : public QMainWindow
 
 public:
 	mainwindow(QWidget *parent = Q_NULLPTR);
-	QSpinBox *spinBox;
-	QSlider *slider;
-	QTextEdit *text;
-	QWidget *cwidget;
-	QHBoxLayout *layout;
+	QTimer *timer;
 
 protected:
-	bool eventFilter(QObject *obj, QEvent *event);
+	void onTimeOut();
 
 private:
 	Ui::mainwindowClass ui;

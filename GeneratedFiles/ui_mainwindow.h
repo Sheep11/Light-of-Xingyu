@@ -22,25 +22,26 @@ QT_BEGIN_NAMESPACE
 class Ui_mainwindowClass
 {
 public:
+    QWidget *centralWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *mainwindowClass)
     {
         if (mainwindowClass->objectName().isEmpty())
             mainwindowClass->setObjectName(QString::fromUtf8("mainwindowClass"));
-        mainwindowClass->resize(600, 400);
-        menuBar = new QMenuBar(mainwindowClass);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        mainwindowClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(mainwindowClass);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        mainwindowClass->addToolBar(mainToolBar);
+        mainwindowClass->resize(972, 682);
         centralWidget = new QWidget(mainwindowClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         mainwindowClass->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(mainwindowClass);
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 972, 23));
+        mainwindowClass->setMenuBar(menuBar);
+        mainToolBar = new QToolBar(mainwindowClass);
+        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        mainwindowClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(mainwindowClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         mainwindowClass->setStatusBar(statusBar);

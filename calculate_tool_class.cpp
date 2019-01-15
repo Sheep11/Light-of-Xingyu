@@ -1,4 +1,5 @@
 #include"calculate_tool_class.h"
+#include"translate_tool_class.h"
 using namespace std;
 
 //返回a,b的最大公因数
@@ -108,6 +109,57 @@ word calculate_tool::calculate(word a, word op, word b)
 	result.init(0, rn, rd);
 
 	return result;
+}
+
+//返回后缀表达式suffix的计算结果，如果表达式不正确，返回的result.type = -1
+word calculate_tool::calculate_suffix(string exp)
+{
+	translate_tool T_tool;
+	queue<word> suffix = T_tool.translate_into_suffix(exp);
+
+	word result;
+	class stack<word> num_stack;//数字栈
+
+	//后缀队列非空时
+	while (!suffix.empty())
+	{
+		word t_word;//临时存储从队列中弹出的元素
+		t_word = suffix.front();
+		suffix.pop();
+
+		if (t_word.type == 0)//如果为数字
+		{
+			num_stack.push(t_word);//入数字栈
+		}
+		else//如果为操作符
+		{
+			//从数字栈中弹出两个数字，计算结果，将结果入数字栈
+
+			word b = num_stack.top();
+			num_stack.pop();
+			word a = num_stack.top();
+			num_stack.pop();
+
+			word c = calculate(a, t_word, b);
+			if (c.type == -1)//如果计算结果出现错误
+			{
+				result.init(-1, 0, 0);
+				return result;
+			}
+			else
+				num_stack.push(c);
+		}
+	}
+
+	//如果最终数字栈里只有一个数字，说明表达式正确，否则错误
+	if (num_stack.size() == 1)
+		return num_stack.top();
+	else
+	{
+		result.init(-1, 0, 0);
+		return result;
+	}
+
 }
 
 //返回后缀表达式suffix的计算结果，如果表达式不正确，返回的result.type = -1

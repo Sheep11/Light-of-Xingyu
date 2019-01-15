@@ -13,6 +13,8 @@
 #include<qtablewidget.h>
 #include<qpushbutton.h>
 #include<qheaderview.h>
+#include<string>
+#include"class.h"
 
 class mainwindow : public QMainWindow
 {
@@ -20,9 +22,19 @@ class mainwindow : public QMainWindow
 
 public:
 	mainwindow(QWidget *parent = Q_NULLPTR);
+	QLineEdit *ansedit;
+	QLineEdit *quesedit;
+	QLabel *resttime;
+
+	int time;
 	QTimer *timer;
+	QTableWidget *hislist;
+
+	formula f;
+	generator *gen;
 
 protected:
+	void onEnterClicked();
 	void onTimeOut();
 
 private:

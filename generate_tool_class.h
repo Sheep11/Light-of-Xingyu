@@ -42,5 +42,5 @@ public:
 	//改变显示乘方的方式
 	void change_show_way(string& exp);
 
-	stack<formula> generate_exp(int N = 1000, int max_number = 10, int max_oper_sum = 10, int show_way = 0);
+	vector<formula> generate_exp(int N = 1000, int max_number = 10, int max_oper_sum = 10, int show_way = 0);
 };

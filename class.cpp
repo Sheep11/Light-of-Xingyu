@@ -126,42 +126,44 @@ bi_tree& bi_tree::operator =(const bi_tree& source_tree)//重载赋值运算符
 
 formula::formula()
 {
-	;
+	id = -1;
 }
 formula::formula(string P, string A)
 {
-	Problem = P;
-	Answer = A;
+	problem = P;
+	answer = A;
 }
 formula::formula(const formula& F)
 {
-	this->Problem = F.Problem;
-	this->Answer = F.Answer;
+	this->id = F.id;
+	this->problem = F.problem;
+	this->answer = F.answer;
 }
 
 void formula::init()
 {
-	;
+	id = -1;
 }
 void formula::init(string P, string A)
 {
-	Problem = P;
-	Answer = A;
+	problem = P;
+	answer = A;
 }
 
-string formula::problem()
+formula& formula::operator =(const formula& source_formula)
 {
-	return Problem;
-}
-
-string formula::answer()
-{
-	return Answer;
+	if (this != &source_formula)
+	{
+		this->id = source_formula.id;
+		this->problem = source_formula.problem;
+		this->answer = source_formula.answer;
+	}
+	return *this;
 }
 
 int formula::check(string u_answer)
 {
-	if (u_answer == Answer)
+	if (u_answer == answer)
 		return 1;
 
 	for (int i = 0; i < u_answer.size(); i++)
@@ -172,7 +174,7 @@ int formula::check(string u_answer)
 			{
 				u_answer.erase(i + 1, 1);
 				u_answer.insert(0, "-");
-				if (u_answer == Answer)
+				if (u_answer == answer)
 					return 1;
 				else
 					return 0;
@@ -187,7 +189,8 @@ int formula::check(string u_answer)
 
 generator::generator()
 {
-	show_way = 0;
+	sum = 0;
+	index = 1;
 }
 
 void generator::output_into_file(string exp, string path)
@@ -196,39 +199,61 @@ void generator::output_into_file(string exp, string path)
 	out << exp << endl;
 }
 
-formula generator::get_formula(int Show_way)
+formula generator::get_formula(int show_way)
 {
-	if (Show_way != 1)
-		Show_way = 0;
-
-	if (this->show_way != Show_way)
-	{
-		while (Formula.size() != 0)
-			Formula.pop();
-
-		this->show_way = Show_way;
-	}
-
-	if (Formula.size() != 0)
-	{
-		formula return_value = Formula.top();
-		output_into_file(return_value.problem());
-
-		Formula.pop();
-
-		return return_value;
-	}
-	else
+	if (index > sum)//题目用尽，重新生成
 	{
 		generate_tool G_tool;
-		Formula = G_tool.generate_exp(1000, 10, 10, this->show_way);
-
-		formula return_value = Formula.top();
-		output_into_file(return_value.problem());
-
-		Formula.pop();
-
-		return return_value;
+		vector<formula> tem_vector = G_tool.generate_exp(1000, 10, 10);//生成1000道题目
+		formula_vector.insert(formula_vector.end(), tem_vector.begin(), tem_vector.end());//生成的题目加入容器中
+		sum += 1000;
 	}
+	
+	//给题目和答案进行编号
+	formula_vector[index-1].id = index;
+
+	//如果显示模式为1
+	if (show_way == 1)
+	{
+		generate_tool G_tool;
+		G_tool.change_show_way(formula_vector[index-1].problem);//改变题目的显示模式
+	}
+
+	formula return_value;
+	return_value = formula_vector[index-1];//返回值
+
+	index++;
+
+	//输出到文件
+	output_into_file(return_value.problem);
+
+	return return_value;
+}
+
+int generator::check_answer(int id, string u_answer)
+{
+	if (u_answer == formula_vector[id - 1].answer)
+		return 1;
+
+	for (int i = 0; i < u_answer.size(); i++)
+	{
+		if (u_answer[i] == ' ' || u_answer[i] == '\n')
+			u_answer.erase(i, 1);
+
+		if (u_answer[i] == '/')
+		{
+			if (u_answer[i + 1] == '-')
+			{
+				u_answer.erase(i + 1, 1);
+				u_answer.insert(0, "-");
+				if (u_answer == formula_vector[id - 1].answer)
+					return 1;
+				else
+					return 0;
+			}
+		}
+	}
+
+	return 0;
 }
 

@@ -46,10 +46,10 @@ public:
 //题目和答案
 class formula
 {
-private:
-	string Problem;
-	string Answer;
 public:
+	int id;//题目编号
+	string problem;//题目
+	string answer;//答案
 
 	formula();
 	formula(string P, string A);
@@ -58,27 +58,28 @@ public:
 	void init();
 	void init(string P, string A);
 
-	string problem();
-	string answer();
+	formula& operator =(const formula& source_formula);//重载赋值运算符
 
 	int check(string u_answer);
 };
 
-
 class generator
 {
 private:
-	int show_way;//显示乘方的方式，如果为0显示为“^”，为1显示为“**”，初始化默认为0
-	stack<formula> Formula;
+	vector<formula> formula_vector;//存储题目和答案的容器
+	int sum;//存储的数量
+	int index;//没有使用过的第一个题目和答案的编号（编号数值等于下标+1）
 public:
 	generator();
 
 	//输出式子到文件path中，默认为problem_file.txt
 	void output_into_file(string exp, string path = "problem_file.txt");
 
-	//获取一个式子及答案,返回值为formula对象
+	//获取一个式子及答案,返回值为formula对象，当容器中没有未使用过的题目时，会自动生成新的题目
 	//默认显示乘方为“^”，如果需要切换为“**”，传入整型参数1
 	formula get_formula(int show_way = 0);
 
+	//检查答案是否正确。id为题号，u_answer为用户的答案，正确返回1，错误返回0
+	int check_answer(int id, string u_answer);
 };
 

@@ -125,6 +125,9 @@ void generate_tool::add_oper_into_exp(string& exp, int max_oper_sum)
 //将仅有操作符的表达式规范化
 void generate_tool::normalize_exp(string& oper_exp)
 {
+	while(oper_exp[0] == '(')
+		oper_exp.erase(0, 1);
+
 	//进行括号匹配，如果有不合法的)则删除，有多出的(则在字符串末尾添加)与之匹配
 	stack<char>bracket_stack;
 	for (int i = 0; i < oper_exp.size(); i++)
@@ -278,11 +281,11 @@ void generate_tool::change_show_way(string& exp)
 //max_number为表达式中数字的最大值，
 //max_oper_sum为表达式中最多含有的运算符的数量
 //show_way为显示乘方的模式，为0显示^，为1显示**
-stack<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_sum, int show_way)
+vector<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_sum, int show_way)
 {
-	stack<formula>	F_stack;//将要返回的栈
+	vector<formula>	F_vector;//将要返回的容器
 	if (N > MAX_SIZE)
-		return F_stack;
+		return F_vector;
 
 	srand(time(NULL));
 
@@ -307,7 +310,7 @@ stack<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_s
 
 		suffix[n] = T_tool.translate_into_suffix(exp[n]);//转化为后缀表达式
 
-		result[n] = C_tool.calculate_suffix(suffix[n]);//计算后缀表达式的值
+		result[n] = C_tool.calculate_suffix(exp[n]);//计算后缀表达式的值
 
 		if (G_tool.restrict_result(exp[n], result[n]) == 0)//如果计算结果不符合要求，重新生成表达式
 		{
@@ -330,14 +333,13 @@ stack<formula> generate_tool::generate_exp(int N, int max_number, int max_oper_s
 		if (show_way == 1)
 			G_tool.change_show_way(exp[n]);
 
-		//表达式和答案存入栈中
+		//表达式和答案存入容器中
 		formula F;
 		F.init(exp[n], result[n].str_word());
-		F_stack.push(F);
+		F_vector.push_back(F);
 
-		//cout << exp[n] << endl;
 		n++;
 	}
 
-	return F_stack;
+	return F_vector;
 }

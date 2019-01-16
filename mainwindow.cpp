@@ -27,6 +27,7 @@ mainwindow::mainwindow(QWidget *parent)
 	QLabel *hislabel = new QLabel("History", ui.centralWidget);
 	hislist = new QTableWidget(ui.centralWidget);
 	hislist->setColumnCount(3);
+	ratelabel = new QLabel("Correct Rate:", ui.centralWidget);
 	QStringList header;
 	header << tr("Question") << tr("Correct Answer") << tr("Your Answer");
 	hislist->setHorizontalHeaderLabels(header);
@@ -37,7 +38,7 @@ mainwindow::mainwindow(QWidget *parent)
 	hislist->horizontalHeader()->setFont(font);
 
 	hislist->horizontalHeader()->setStretchLastSection(true); //设置充满表宽度
-	hislist->horizontalHeader()->resizeSection(0, 400);
+	hislist->horizontalHeader()->resizeSection(0, 200);
 	hislist->verticalHeader()->setDefaultSectionSize(10); //设置行高
 	hislist->setFrameShape(QFrame::NoFrame); //设置无边框
 	hislist->setShowGrid(false); //设置不显示格子线
@@ -56,7 +57,8 @@ mainwindow::mainwindow(QWidget *parent)
 	glayout->addWidget(enterbutton, 2, 14, 2, 3);
 	glayout->addWidget(line, 4, 0, 3, 17);
 	glayout->addWidget(hislabel, 6, 0, 1, 2);
-	glayout->addWidget(hislist, 7, 0, 7, 11);
+	glayout->addWidget(ratelabel, 6, 4, 1, 1);
+	glayout->addWidget(hislist, 7, 0, 7, 8);
 
 	gen = new generator();
 	f = gen->get_formula();
@@ -83,6 +85,8 @@ void mainwindow::onTypeChanged()
 }
 
 void mainwindow::onEnterClicked() {
+	all_count++;
+
 	time = 20;
 	timer->setInterval(1000);
 
@@ -94,12 +98,17 @@ void mainwindow::onEnterClicked() {
 	QTableWidgetItem *ansitem = new QTableWidgetItem(ansedit->text());
 	if (ansedit->text().toStdString() != f.answer)
 		ansitem->setTextColor(Qt::red);
+	else
+		right_count++;
 	hislist->setItem(count, 2, ansitem);
 	ansitem->textColor();
 	ansedit->clear();
 
 	f = gen->get_formula(display_mode);
 	quesedit->setText(QString::fromStdString(f.problem));
+
+	string rate_str = "Correct Rate:" + std::to_string(right_count) + "/" + std::to_string(all_count);
+	ratelabel->setText(QString::fromStdString(rate_str));
 }
 
 

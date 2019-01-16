@@ -32,10 +32,13 @@ public:
 
 	int time;
 	QTimer *timer;
+	QLabel *ratelabel;
 	QTableWidget *hislist;
 
 	formula f;
 	generator *gen;
+
+	int all_count, right_count;
 
 protected:
 	void onEnterClicked();

@@ -7,8 +7,8 @@ mainwindow::mainwindow(QWidget *parent)
 	
 	QLabel *queslabel = new QLabel("Question", ui.centralWidget);
 	QLabel *anslabel = new QLabel("Answer", ui.centralWidget);
-	type = new QCheckBox("Switch Display Mode", ui.centralWidget);
-	connect(type, &QCheckBox::stateChanged, this, &mainwindow::onTypeChanged);
+	modebox = new QCheckBox("Switch Display Mode", ui.centralWidget);
+	connect(modebox, &QCheckBox::stateChanged, this, &mainwindow::onTypeChanged);
 	
 	quesedit = new QLineEdit(ui.centralWidget);
 	quesedit->setEnabled(false);
@@ -50,7 +50,7 @@ mainwindow::mainwindow(QWidget *parent)
 	glayout->addWidget(queslabel, 0, 0, 1, 1);
 	glayout->addWidget(anslabel, 0, 10, 1, 1);
 	glayout->addWidget(resttime, 1, 4, 1, 2);
-	glayout->addWidget(type, 1, 0, 1, 2);
+	glayout->addWidget(modebox, 1, 0, 1, 2);
 	glayout->addWidget(quesedit, 2, 0, 2, 7);
 	glayout->addWidget(ansedit, 2, 10, 2, 3);
 	glayout->addWidget(enterbutton, 2, 14, 2, 3);
@@ -80,7 +80,6 @@ void mainwindow::onTimeOut()
 void mainwindow::onTypeChanged()
 {
 	display_mode = !display_mode;
-	cout << !1 << !0;
 }
 
 void mainwindow::onEnterClicked() {

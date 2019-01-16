@@ -13,6 +13,7 @@
 #include<qtablewidget.h>
 #include<qpushbutton.h>
 #include<qheaderview.h>
+#include<qcheckbox.h>
 #include<string>
 #include"class.h"
 
@@ -26,6 +27,9 @@ public:
 	QLineEdit *quesedit;
 	QLabel *resttime;
 
+	QCheckBox *modebox;
+	int display_mode;
+
 	int time;
 	QTimer *timer;
 	QTableWidget *hislist;
@@ -36,6 +40,7 @@ public:
 protected:
 	void onEnterClicked();
 	void onTimeOut();
+	void onTypeChanged();
 
 private:
 	Ui::mainwindowClass ui;

@@ -53,11 +53,17 @@ word& word::operator =(const word& source_word)//ÖØÔØ¸³ÖµÔËËã·û
 string word::str_word()
 {
 	string t_result;
-	t_result += to_string(num);
-	if (de != 1)
+
+	if (type == -1)
+		t_result = "error";
+	else
 	{
-		t_result += '/';
-		t_result += to_string(de);
+		t_result += to_string(num);
+		if (de != 1)
+		{
+			t_result += '/';
+			t_result += to_string(de);
+		}
 	}
 
 	return t_result;
@@ -168,6 +174,9 @@ int formula::check(string u_answer)
 
 	for (int i = 0; i < u_answer.size(); i++)
 	{
+		if (u_answer[i] == ' ' || u_answer[i] == '\n')
+			u_answer.erase(i, 1);
+
 		if (u_answer[i] == '/')
 		{
 			if (u_answer[i + 1] == '-')

@@ -184,9 +184,6 @@ int formula::check(string u_answer)
 	return 0;
 }
 
-
-
-
 generator::generator()
 {
 	sum = 0;

@@ -7,6 +7,9 @@ mainwindow::mainwindow(QWidget *parent)
 	
 	QLabel *queslabel = new QLabel("Question", ui.centralWidget);
 	QLabel *anslabel = new QLabel("Answer", ui.centralWidget);
+	type = new QCheckBox("Switch Display Mode", ui.centralWidget);
+	connect(type, &QCheckBox::stateChanged, this, &mainwindow::onTypeChanged);
+	
 	quesedit = new QLineEdit(ui.centralWidget);
 	quesedit->setEnabled(false);
 	quesedit->setFixedHeight(50);
@@ -44,14 +47,15 @@ mainwindow::mainwindow(QWidget *parent)
 
 
 	QGridLayout *glayout = new QGridLayout(ui.centralWidget);
-	glayout->addWidget(queslabel, 0, 0, 1, 2);
-	glayout->addWidget(anslabel, 0, 10, 1, 2);
-	glayout->addWidget(quesedit, 1, 0, 2, 7);
-	glayout->addWidget(ansedit, 1, 10, 2, 3);
-	glayout->addWidget(enterbutton, 1, 14, 2, 3);
+	glayout->addWidget(queslabel, 0, 0, 1, 1);
+	glayout->addWidget(anslabel, 0, 10, 1, 1);
+	glayout->addWidget(resttime, 1, 4, 1, 2);
+	glayout->addWidget(type, 1, 0, 1, 2);
+	glayout->addWidget(quesedit, 2, 0, 2, 7);
+	glayout->addWidget(ansedit, 2, 10, 2, 3);
+	glayout->addWidget(enterbutton, 2, 14, 2, 3);
 	glayout->addWidget(line, 4, 0, 3, 17);
 	glayout->addWidget(hislabel, 6, 0, 1, 2);
-	glayout->addWidget(resttime, 6, 10, 1, 2);
 	glayout->addWidget(hislist, 7, 0, 7, 11);
 
 	gen = new generator();
@@ -73,6 +77,12 @@ void mainwindow::onTimeOut()
 	resttime->setText(QString::fromStdString(str));
 }
 
+void mainwindow::onTypeChanged()
+{
+	display_mode = !display_mode;
+	cout << !1 << !0;
+}
+
 void mainwindow::onEnterClicked() {
 	time = 20;
 	timer->setInterval(1000);
@@ -89,7 +99,7 @@ void mainwindow::onEnterClicked() {
 	ansitem->textColor();
 	ansedit->clear();
 
-	f = gen->get_formula();
+	f = gen->get_formula(display_mode);
 	quesedit->setText(QString::fromStdString(f.problem));
 }
 

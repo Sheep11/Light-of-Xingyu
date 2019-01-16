@@ -14,29 +14,33 @@ mainwindow::mainwindow(QWidget *parent)
 	quesedit->setEnabled(false);
 	quesedit->setFixedHeight(50);
 	ansedit = new QLineEdit(ui.centralWidget);
+	ansedit->setEnabled(false);
 	ansedit->setFixedHeight(50);
 	connect(ansedit, &QLineEdit::returnPressed, this, &mainwindow::onEnterClicked);
 	QFrame *line = new QFrame(ui.centralWidget);
 	line->setFrameShape(QFrame::HLine);
 	line->setFrameShadow(QFrame::Sunken);
-	QPushButton *enterbutton = new  QPushButton("Enter", ui.centralWidget);
+	enterbutton = new  QPushButton("Enter", ui.centralWidget);
+	enterbutton->setEnabled(false);
 	enterbutton->setFixedHeight(50);
 	connect(enterbutton, &QPushButton::clicked, this, &mainwindow::onEnterClicked);
 	resttime = new QLabel(ui.centralWidget);
 
+	QPushButton *startbutton = new QPushButton("Start", ui.centralWidget);
+	connect(startbutton, &QPushButton::clicked, this, &mainwindow::onStartClicked);
+	QPushButton *endbutton = new QPushButton("End", ui.centralWidget);
+	connect(endbutton, &QPushButton::clicked, this, &mainwindow::onEndClicked);
+
 	QLabel *hislabel = new QLabel("History", ui.centralWidget);
+
 	hislist = new QTableWidget(ui.centralWidget);
 	hislist->setColumnCount(3);
 	ratelabel = new QLabel("Correct Rate:", ui.centralWidget);
-	QStringList header;
-	header << tr("Question") << tr("Correct Answer") << tr("Your Answer");
+	QStringList header = { "Questioni","Correct Answer","Your Answer" };
 	hislist->setHorizontalHeaderLabels(header);
-	
-	//设置表头字体加粗
 	QFont font = hislist->horizontalHeader()->font();
 	font.setBold(true);
 	hislist->horizontalHeader()->setFont(font);
-
 	hislist->horizontalHeader()->setStretchLastSection(true); //设置充满表宽度
 	hislist->horizontalHeader()->resizeSection(0, 200);
 	hislist->verticalHeader()->setDefaultSectionSize(10); //设置行高
@@ -46,6 +50,10 @@ mainwindow::mainwindow(QWidget *parent)
 	hislist->setEditTriggers(QAbstractItemView::NoEditTriggers); //设置不可编辑
 	hislist->horizontalHeader()->setFixedHeight(25); //设置表头的高度
 
+	scorelist = new QTableWidget(ui.centralWidget);
+	scorelist->setColumnCount(2);
+	scorelist->horizontalHeader()->setStretchLastSection(true);
+	scorelist->setHorizontalHeaderLabels(QStringList({ "Data","Score" }));
 
 	QGridLayout *glayout = new QGridLayout(ui.centralWidget);
 	glayout->addWidget(queslabel, 0, 0, 1, 1);
@@ -55,19 +63,18 @@ mainwindow::mainwindow(QWidget *parent)
 	glayout->addWidget(quesedit, 2, 0, 2, 7);
 	glayout->addWidget(ansedit, 2, 10, 2, 3);
 	glayout->addWidget(enterbutton, 2, 14, 2, 3);
+	glayout->addWidget(startbutton, 4, 3, 1, 2);
+	glayout->addWidget(endbutton, 4, 9, 1, 2);
 	glayout->addWidget(line, 4, 0, 3, 17);
 	glayout->addWidget(hislabel, 6, 0, 1, 2);
 	glayout->addWidget(ratelabel, 6, 4, 1, 1);
 	glayout->addWidget(hislist, 7, 0, 7, 8);
+	glayout->addWidget(scorelist, 7, 9, 7, 7);
 
 	gen = new generator();
-	f = gen->get_formula();
-	quesedit->setText(QString::fromStdString(f.problem));
 	
 	timer = new QTimer(ui.centralWidget);
 	connect(timer, &QTimer::timeout, this, &mainwindow::onTimeOut);
-	time = 20;
-	timer->start(1000);
 }
 
 void mainwindow::onTimeOut()
@@ -82,6 +89,35 @@ void mainwindow::onTimeOut()
 void mainwindow::onTypeChanged()
 {
 	display_mode = !display_mode;
+}
+
+void mainwindow::onStartClicked()
+{
+	f = gen->get_formula();
+	quesedit->setText(QString::fromStdString(f.problem));
+
+	ansedit->setEnabled(true);
+	for (int i = hislist->rowCount(); i >= 0; i--)
+		hislist->removeRow(i);
+
+	time = 20;
+	timer->start(1000);
+	all_count = 0; right_count = 0;
+
+	enterbutton->setEnabled(true);
+}
+
+void mainwindow::onEndClicked()
+{
+	ansedit->setEnabled(false);
+
+	timer->stop();
+	enterbutton->setEnabled(false);
+
+	int count = scorelist->rowCount();
+	scorelist->insertRow(count);
+	scorelist->setItem(count, 0, new QTableWidgetItem(QDateTime::currentDateTime().toString()));
+	scorelist->setItem(count, 1, new QTableWidgetItem(ratelabel->text()));
 }
 
 void mainwindow::onEnterClicked() {

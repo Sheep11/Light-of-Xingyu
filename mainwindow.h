@@ -14,6 +14,7 @@
 #include<qpushbutton.h>
 #include<qheaderview.h>
 #include<qcheckbox.h>
+#include<qdatetime.h>
 #include<string>
 #include"class.h"
 
@@ -26,6 +27,7 @@ public:
 	QLineEdit *ansedit;
 	QLineEdit *quesedit;
 	QLabel *resttime;
+	QPushButton *enterbutton;
 
 	QCheckBox *modebox;
 	int display_mode;
@@ -34,6 +36,7 @@ public:
 	QTimer *timer;
 	QLabel *ratelabel;
 	QTableWidget *hislist;
+	QTableWidget *scorelist;
 
 	formula f;
 	generator *gen;
@@ -44,6 +47,8 @@ protected:
 	void onEnterClicked();
 	void onTimeOut();
 	void onTypeChanged();
+	void onStartClicked();
+	void onEndClicked();
 
 private:
 	Ui::mainwindowClass ui;

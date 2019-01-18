@@ -25,6 +25,18 @@ int calculate_tool::gcd(int a, int b)
 	return b;
 }
 
+//约束结果，如果结果符合要求则返回1，否则返回0
+int calculate_tool::restrict_result(int rn, int rd)
+{
+	if (rn > 100 || rd > 100)
+		return 0;
+
+	if (rn < -100 || rd < -100)
+		return 0;
+
+	return 1;
+}
+
 //返回a op b的计算结果。如果出现了除以0或者指数不为非负整数，返回的result.type = -1
 word calculate_tool::calculate(word a, word op, word b)
 {
@@ -81,8 +93,18 @@ word calculate_tool::calculate(word a, word op, word b)
 			rn = rd = 1;
 			for (int i = 1; i <= bn; i++)
 			{
-				rn *= an;
-				rd *= ad;
+				if (restrict_result(rn, rd) == 0)
+				{
+					result.init(-1, 0, 0);
+					return result;
+				}
+				else
+				{
+					rn *= an;
+					rd *= ad;
+				}
+
+
 			}
 		}
 
@@ -92,12 +114,21 @@ word calculate_tool::calculate(word a, word op, word b)
 		break;
 	}
 
+
+
 	//化简
 	int g = gcd(rn, rd);//结果的分子，分母的最大公因数
 	if (g != 0)
 	{
 		rn /= g;
 		rd /= g;
+	}
+
+	//如果结果超出范围
+	if (restrict_result(rn, rd) == 0)
+	{
+		result.init(-1, 0, 0);
+		return result;
 	}
 
 	if (rn == 0)

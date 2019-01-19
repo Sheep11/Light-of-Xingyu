@@ -109,6 +109,9 @@ void mainwindow::onStartClicked()
 
 void mainwindow::onEndClicked()
 {
+	if (hislist->rowCount() == 0)
+		return;
+
 	ansedit->setEnabled(false);
 
 	timer->stop();

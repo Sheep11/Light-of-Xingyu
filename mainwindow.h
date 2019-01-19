@@ -15,8 +15,11 @@
 #include<qheaderview.h>
 #include<qcheckbox.h>
 #include<qdatetime.h>
+#include<qtooltip.h>
 #include<string>
 #include"class.h"
+
+#pragma execution_character_set("utf-8")
 
 class mainwindow : public QMainWindow
 {
@@ -49,6 +52,7 @@ protected:
 	void onTypeChanged();
 	void onStartClicked();
 	void onEndClicked();
+	void onTipClicked();
 
 private:
 	Ui::mainwindowClass ui;

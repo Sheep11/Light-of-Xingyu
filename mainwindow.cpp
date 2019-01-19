@@ -121,17 +121,19 @@ void mainwindow::onEndClicked()
 }
 
 void mainwindow::onEnterClicked() {
-	all_count++;
+	all_count++;	//增加做题总数
 
+	//重置剩余时间
 	time = 20;
 	timer->setInterval(1000);
 
+	//动态插入列表
 	int count = hislist->rowCount();
 	hislist->insertRow(count);
-
 	hislist->setItem(count, 0, new QTableWidgetItem(QString::fromStdString(f.problem)));
 	hislist->setItem(count, 1, new QTableWidgetItem(QString::fromStdString(f.answer)));
 	QTableWidgetItem *ansitem = new QTableWidgetItem(ansedit->text());
+	//判断正误
 	if (ansedit->text().toStdString() != f.answer)
 		ansitem->setTextColor(Qt::red);
 	else
@@ -140,9 +142,11 @@ void mainwindow::onEnterClicked() {
 	ansitem->textColor();
 	ansedit->clear();
 
+	//生成新题目
 	f = gen->get_formula(display_mode);
 	quesedit->setText(QString::fromStdString(f.problem));
 
+	//更新正确率
 	string rate_str = "Correct Rate:" + std::to_string(right_count) + "/" + std::to_string(all_count);
 	ratelabel->setText(QString::fromStdString(rate_str));
 }

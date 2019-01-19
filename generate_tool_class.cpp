@@ -60,7 +60,7 @@ int generate_tool::cmp_word(word a, word b)
 	return 1;
 }
 
-//判断a,b的子树是否有交叉比较的必要，如果有，返回1
+//判断a,b的子树是否有交叉比较的必要（即是否a、b均为加号或乘号），如果有，返回1
 int generate_tool::swap_flag(bi_tree a, bi_tree b)
 {
 	//如果a,b存储的均为+或者*
@@ -73,20 +73,21 @@ int generate_tool::swap_flag(bi_tree a, bi_tree b)
 //如果两棵树相同返回1，否则返回0
 int generate_tool::compare_tree(bi_tree *a, bi_tree *b)
 {
-	if (a == NULL && b == NULL)
+	if (a == NULL && b == NULL)//如果a b均为叶子节点
 		return 1;
 
-	if ((a != NULL && b == NULL) || (a == NULL && b != NULL))
+	if ((a != NULL && b == NULL) || (a == NULL && b != NULL))//a b不全为叶子节点
 		return 0;
 
 	if (a && b)
 	{
 		if (cmp_word(a->value, b->value))//如果当前节点相同
 		{
-			if (compare_tree(a->l_child, b->l_child))
-				return compare_tree(a->r_child, b->r_child);
+			if (compare_tree(a->l_child, b->l_child))//比较a、b的左节点
+				return compare_tree(a->r_child, b->r_child);//比较a、b的右节点
 			else
 			{
+				//如果有交叉比较的必要，交叉比较a、b的左右节点
 				if (swap_flag(*a, *b) && compare_tree(a->r_child, b->l_child))
 					return compare_tree(a->l_child, b->r_child);
 			}
@@ -115,7 +116,7 @@ char generate_tool::translate_into_oper(int num)
 //添加操作符
 void generate_tool::add_oper_into_exp(string& exp, int max_oper_sum)
 {
-	int oper_sum = rand() % max_oper_sum + 1;//将要添加的操作符数量
+	int oper_sum = rand() % max_oper_sum + 2;//将要添加的操作符数量
 	for (int i = 1; i <= oper_sum; i++)
 	{
 		exp += translate_into_oper(rand() % 7 + 1);
@@ -189,9 +190,10 @@ void generate_tool::normalize_exp(string& oper_exp)
 		}
 	}
 
-	//保证表达式中至少有一个操作符
+	//保证表达式中至少有两个操作符
 	if (oper_exp.size() == 0)
 	{
+		oper_exp += translate_into_oper(rand() % 5 + 1);
 		oper_exp += translate_into_oper(rand() % 5 + 1);
 	}
 }
@@ -229,9 +231,6 @@ int generate_tool::restrict_result(string exp, word result)
 		return 0;
 
 	if (exp == result.str_word())
-		return 0;
-	
-	if (result.num > 1000 || result.de > 100 || result.num * (-1) > 1000 || result.de * (-1) > 100)
 		return 0;
 
 	return 1;
